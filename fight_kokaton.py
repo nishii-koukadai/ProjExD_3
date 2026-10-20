@@ -171,6 +171,10 @@ class Explosion:
         self.life = life
 
     def update(self, screen: pg.Surface):
+        """
+        爆弾の描画時間を設定する
+        引数 screen：画面Surface
+        """
         self.life -= 1
         if self.life > 0:
             screen.blit(self.imgs[self.life % 2], self.rct)
@@ -210,7 +214,7 @@ def main():
         beams = [beam for beam in beams if check_bound(beam.rct) == (True, True)]
         #爆発時間が過ぎた爆弾を削除
         explosions = [exp for exp in explosions if exp.life > 0]
-        if bomb in bombs:
+        if bomb in bomb:
             if bird.rct.colliderect(bomb.rct):
                 # ゲームオーバー時に，こうかとん画像を切り替え，1秒間表示させる
                 bird.change_img(8, screen)
