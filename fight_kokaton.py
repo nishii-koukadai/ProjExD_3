@@ -159,7 +159,7 @@ def main():
     bg_img = pg.image.load("fig/pg_bg.jpg")
     bird = Bird((300, 200))
     bombs = [Bomb((255, 0, 0), 10) for _ in range(NUM_OF_BOMBS)]
-    beam = None  # ゲーム初期化時にはビームは存在しない
+    beams = []  # ゲーム初期化時にはビームは存在しない
     clock = pg.time.Clock()
     score = Score()
     tmr = 0
@@ -169,16 +169,21 @@ def main():
                 return
             if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
                  # スペースキー押下でBeamクラスのインスタンス生成
-                 beam = Beam(bird)         
+                 beams.append(Beam(bird))          
         screen.blit(bg_img, [0, 0]) 
         for i, bomb in enumerate(bombs):
-            if bomb is not None and beam is not None:
-                if beam.rct.colliderect(bomb.rct):
-                    bird.change_img(6, screen)
-                    score.value += 1
-                    beam = None
-                    bombs[i] = None
+            for j, beam in enumerate(beams):
+                if bomb is not None and beam is not None:
+                    if beam.rct.colliderect(bomb.rct):
+                        bird.change_img(6, screen)
+                        score.value += 1
+                        beams[j] = None
+                        bombs[i] = None
+        #衝突した爆弾をリストから削除
         bombs = [bomb for bomb in bombs if bomb is not None]
+        #画面から出たビームをリストから削除
+        beams = [beam for beam in beams if beam is not None]
+        beams = [beam for beam in beams if check_bound(beam.rct) == (True, True)]
         if bomb is not None:
             if bird.rct.colliderect(bomb.rct):
                 # ゲームオーバー時に，こうかとん画像を切り替え，1秒間表示させる
@@ -191,11 +196,11 @@ def main():
                 return
 
         key_lst = pg.key.get_pressed()
-        bird.update(key_lst, screen)
-        if beam != None:
+        bird.update(key_lst, screen) 
+        for beam in beams:
             beam.update(screen)   
         for bomb in bombs:
-                    bomb.update(screen)
+            bomb.update(screen)
         score.update(screen)
         pg.display.update()
         tmr += 1
