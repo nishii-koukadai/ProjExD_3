@@ -172,7 +172,7 @@ class Explosion:
 
     def update(self, screen: pg.Surface):
         """
-        爆弾の描画時間を設定する
+        爆弾の寿命を設定する
         引数 screen：画面Surface
         """
         self.life -= 1
@@ -194,8 +194,7 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 return
-            if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
-                 # スペースキー押下でBeamクラスのインスタンス生成
+            if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:# スペースキー押下でBeamクラスのインスタンス生成
                  beams.append(Beam(bird))          
         screen.blit(bg_img, [0, 0]) 
         for i, bomb in enumerate(bombs):
@@ -214,7 +213,7 @@ def main():
         beams = [beam for beam in beams if check_bound(beam.rct) == (True, True)]
         #爆発時間が過ぎた爆弾を削除
         explosions = [exp for exp in explosions if exp.life > 0]
-        if bomb in bomb:
+        if bomb in bombs:
             if bird.rct.colliderect(bomb.rct):
                 # ゲームオーバー時に，こうかとん画像を切り替え，1秒間表示させる
                 bird.change_img(8, screen)
