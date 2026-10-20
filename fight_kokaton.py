@@ -210,7 +210,7 @@ def main():
         beams = [beam for beam in beams if check_bound(beam.rct) == (True, True)]
         #爆発時間が過ぎた爆弾を削除
         explosions = [exp for exp in explosions if exp.life > 0]
-        if bomb is not None:
+        if bomb in bombs:
             if bird.rct.colliderect(bomb.rct):
                 # ゲームオーバー時に，こうかとん画像を切り替え，1秒間表示させる
                 bird.change_img(8, screen)
